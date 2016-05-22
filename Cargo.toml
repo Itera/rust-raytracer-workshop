@@ -3,6 +3,9 @@ name = "rrt-fagkveld"
 version = "0.1.0"
 authors = ["Sondre Lefsaker <sondre.lefsaker@itera.no>"]
 
+[profile.dev]
+opt-level = 2
+
 [dev-dependencies]
 hamcrest = "0.1"
 
