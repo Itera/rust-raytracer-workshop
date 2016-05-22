@@ -1,0 +1,11 @@
+[package]
+name = "rrt-fagkveld"
+version = "0.1.0"
+authors = ["Sondre Lefsaker <sondre.lefsaker@itera.no>"]
+
+[dev-dependencies]
+hamcrest = "0.1"
+
+[dependencies]
+bmp = "0.1.4"
+rand = "0.3.11"
