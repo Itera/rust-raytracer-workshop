@@ -1,4 +1,4 @@
-use std::ops::{ Add, Mul };
+use std::ops::{ Add, Mul, Div };
 use std::convert::Into;
 
 use bmp::Pixel;
@@ -12,7 +12,6 @@ pub struct Color {
 
 impl Color {
     pub fn new(r: f64, g: f64, b: f64) -> Color {
-        debug_assert!(r <= 1.0 && g <= 1.0 && b <= 1.0, "All color channels must be less than 1.0");
         Color { r: r, g: g, b: b }
     }
 
@@ -53,6 +52,13 @@ impl Mul<Color> for f64 {
     }
 }
 
+impl Div<f64> for Color {
+    type Output = Color;
+
+    fn div(self, val: f64) -> Color {
+        Color::new(self.r / val, self.g / val, self.b / val)
+    }
+}
 
 impl Add<Color> for Color {
     type Output = Color;
