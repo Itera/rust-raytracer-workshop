@@ -24,33 +24,13 @@ impl Vec3 {
         self.x * self.x + self.y * self.y + self.z * self.z
     }
 
-    pub fn mult(&self, num: f64) -> Vec3 {
-        Vec3::new(self.x * num, self.y * num, self.z * num)
-    }
-
-    // make unit vector
     pub fn normalize(&self) -> Vec3 {
         let k = 1.0 / self.length();
         Vec3::new(self.x * k, self.y * k, self.z * k)
     }
 
-    pub fn unit_vector(vec: &Vec3) -> Vec3 {
-        *vec / vec.length()
-    }
-
-    pub fn cross(&self, vec: Vec3) -> Vec3 {
-        let x = self.y * vec.z - self.z * vec.y;
-        let y = self.z * vec.x - self.x * vec.z;
-        let z = self.x * vec.y - self.y * vec.x;
-        Vec3::new(x, y, z)
-    }
-
     pub fn dot(&self, other: Vec3) -> f64 {
         self.x * other.x + self.y * other.y + self.z * other.z
-    }
-
-    pub fn invert(&self) -> Vec3 {
-        Vec3::new(-self.x, -self.y, -self.z)
     }
 }
 
@@ -206,18 +186,6 @@ mod tests {
         let v = v.normalize();
 
         assert_that(v.x, is(close_to(0.424264, 0.00001)));
-    }
-
-    #[test]
-    fn vec3_has_crossproduct() {
-        let a = Vec3::new(1.0, 2.0, 3.0);
-        let b = Vec3::new(3.0, 4.0, 5.0);
-
-        let c = a.cross(b);
-
-        assert_that(c.x, is(equal_to(-2.0)));
-        assert_that(c.y, is(equal_to(4.0)));
-        assert_that(c.z, is(equal_to(-2.0)));
     }
 
     #[test]

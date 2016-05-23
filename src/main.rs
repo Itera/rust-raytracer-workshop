@@ -13,9 +13,7 @@ use camera::Camera;
 use material::{ Material, Lambertian, Color };
 use scene::{ Scene, Sphere, Intersectable };
 
-#[allow(dead_code)]
 mod vec;
-#[allow(dead_code)]
 mod ray;
 mod camera;
 mod material;
@@ -65,7 +63,7 @@ fn create_scene() -> Scene {
 fn main() {
     let (width, height) = (300, 150);
 
-    let num_samples = 100;
+    let num_samples = 200;
     let mut rng = rand::thread_rng();
 
     let camera = create_camera();

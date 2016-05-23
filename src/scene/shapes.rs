@@ -1,8 +1,8 @@
 use vec::Vec3;
 use ray::Ray;
 
-use scene::intersection::*;
-use material::{ Color, Material,  };
+use material::Material;
+use scene::intersection::{ Intersectable, Intersection };
 
 #[derive(Debug)]
 pub struct Sphere {
@@ -50,13 +50,15 @@ impl Intersectable for Sphere {
 mod tests {
     use hamcrest::{ assert_that, is, equal_to };
 
-    use scene::{ Sphere, Intersectable};
+    use scene::{ Sphere, Intersectable };
+    use material::{ Lambertian, Color };
     use vec::Vec3;
     use ray::Ray;
 
     #[test]
     fn should_intersect_sphere() {
-        let s = Sphere::new(Vec3::new(0.0, 0.0, -1.0), 1.0);
+        let m = Box::new(Lambertian::new(Color::white()));
+        let s = Sphere::new(Vec3::new(0.0, 0.0, -1.0), 1.0, m);
 
         let i = s.intersects(
             &Ray::new(Vec3::new(0.0, 0.0, -1.0), Vec3::new(0.0, 0.0, 1.0))).unwrap();
