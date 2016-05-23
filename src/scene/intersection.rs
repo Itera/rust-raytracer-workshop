@@ -1,17 +1,11 @@
 use std::fmt::Debug;
 
-use std::f64;
-
 use vec::Vec3;
 use ray::Ray;
 use color::Color;
 
 pub trait Intersectable : Debug {
-    fn intersects(&self, ray: &Ray) -> Option<Intersection> {
-        self.intersects_with_limits(ray, 0.0, f64::MAX)
-    }
-
-    fn intersects_with_limits(&self, ray: &Ray, t_min: f64, t_max: f64) -> Option<Intersection>;
+    fn intersects(&self, ray: &Ray, t_min: f64, t_max: f64) -> Option<Intersection>;
 
     fn scatter(&self, _: &Ray, _: &Intersection) -> Option<(Color, Ray)> {
         None

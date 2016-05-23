@@ -25,7 +25,7 @@ impl Sphere {
 }
 
 impl Intersectable for Sphere {
-    fn intersects_with_limits(&self, ray: &Ray, t_min: f64, t_max: f64) -> Option<Intersection> {
+    fn intersects(&self, ray: &Ray, t_min: f64, t_max: f64) -> Option<Intersection> {
         let origin = ray.origin - self.origin;
         let a: f64 = ray.direction.dot(ray.direction);
         let b: f64 = origin.dot(ray.direction);

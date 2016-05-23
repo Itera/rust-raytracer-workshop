@@ -4,6 +4,8 @@ extern crate hamcrest;
 extern crate rand;
 extern crate bmp;
 
+use std::f64;
+
 use bmp::Image;
 use rand::{ Rng };
 
@@ -27,7 +29,7 @@ fn gradient(point: Vec3) -> Color {
 fn color(ray: &Ray, scene: &Scene, depth: u32) -> Color {
     if depth == 50 { return Color::black(); }
 
-    match scene.intersects(ray) {
+    match scene.intersects(ray, 0.0, f64::MAX) {
         Some(ref intersection) => {
             if let Some((attenuation, scattered)) = intersection.shape.scatter(ray, intersection) {
                 attenuation * color(&scattered, scene, depth + 1)
