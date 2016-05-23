@@ -1,11 +1,12 @@
 use ray::Ray;
 
-pub use self::shapes::Sphere;
+pub use self::sphere::Sphere;
 pub use self::intersection::{ Intersectable, Intersection };
 
-mod shapes;
+pub mod sphere;
 pub mod intersection;
 
+#[derive(Debug)]
 pub struct Scene {
     pub shapes: Vec<Box<Intersectable>>,
 }

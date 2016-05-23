@@ -10,13 +10,13 @@ use rand::{ Rng };
 use vec::Vec3;
 use ray::Ray;
 use camera::Camera;
-use material::{ Material, Lambertian, Color };
+use color::Color;
 use scene::{ Scene, Sphere, Intersectable };
 
 mod vec;
 mod ray;
+mod color;
 mod camera;
-mod material;
 mod scene;
 
 fn gradient(point: Vec3) -> Color {
@@ -29,7 +29,7 @@ fn color(ray: &Ray, scene: &Scene, depth: u32) -> Color {
 
     match scene.intersects(ray) {
         Some(ref intersection) => {
-            if let Some((attenuation, scattered)) = intersection.material.scatter(ray, intersection) {
+            if let Some((attenuation, scattered)) = intersection.shape.scatter(ray, intersection) {
                 attenuation * color(&scattered, scene, depth + 1)
             } else {
                 Color::black()
@@ -52,18 +52,18 @@ fn create_scene() -> Scene {
         Box::new(Sphere::new(
             Vec3::new(0.0, 0.0, -1.0),
             0.5,
-            Box::new(Lambertian::new(Color::new(0.1, 0.2, 0.5))))),
+            Color::new(0.1, 0.2, 0.5))),
         Box::new(Sphere::new(
             Vec3::new(0.0, -100.5, -1.0),
             100.0,
-            Box::new(Lambertian::new(Color::new(0.5, 0.8, 0.0))))),
+            Color::new(0.5, 0.8, 0.0))),
     ])
 }
 
 fn main() {
     let (width, height) = (300, 150);
 
-    let num_samples = 200;
+    let num_samples = 50;
     let mut rng = rand::thread_rng();
 
     let camera = create_camera();
