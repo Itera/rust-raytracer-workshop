@@ -1,19 +1,15 @@
-use std::ops::{ Add, Sub, Mul, Div, Index };
+use std::ops::{Add, Sub, Mul, Div, Index};
 
 #[derive(Clone, Copy, Debug)]
 pub struct Vec3 {
     pub x: f64,
     pub y: f64,
-    pub z: f64
+    pub z: f64,
 }
 
 impl Vec3 {
     pub fn new(x: f64, y: f64, z: f64) -> Vec3 {
-        Vec3 {
-            x: x,
-            y: y,
-            z: z
-        }
+        Vec3 { x: x, y: y, z: z }
     }
 
     pub fn length(&self) -> f64 {
@@ -31,6 +27,13 @@ impl Vec3 {
 
     pub fn dot(&self, other: Vec3) -> f64 {
         self.x * other.x + self.y * other.y + self.z * other.z
+    }
+
+    pub fn cross(&self, vec: Vec3) -> Vec3 {
+        let x = self.y * vec.z - self.z * vec.y;
+        let y = self.z * vec.x - self.x * vec.z;
+        let z = self.x * vec.y - self.y * vec.x;
+        Vec3::new(x, y, z)
     }
 }
 
@@ -105,14 +108,14 @@ impl Index<u32> for Vec3 {
             0 => &self.x,
             1 => &self.y,
             2 => &self.z,
-            _ => panic!("Index out of bounds: {}", index)
+            _ => panic!("Index out of bounds: {}", index),
         }
     }
 }
 
 #[cfg(test)]
 mod tests {
-    use hamcrest::{ assert_that, is, equal_to, close_to };
+    use hamcrest::{assert_that, is, equal_to, close_to};
     use vec::Vec3;
 
     #[test]
@@ -149,7 +152,7 @@ mod tests {
         assert_that(c.x, is(equal_to(0.0)));
         assert_that(c.y, is(equal_to(1.0)));
         assert_that(c.z, is(equal_to(4.0)));
-   }
+    }
 
     #[test]
     fn vec3_can_be_multiplied_with_f64() {
@@ -164,11 +167,11 @@ mod tests {
 
     #[test]
     fn vec3_can_be_equal() {
-        let a = Vec3::new(1.2,  2.2, 3.2);
-        let b = Vec3::new(1.2,  2.2, 3.2);
+        let a = Vec3::new(1.2, 2.2, 3.2);
+        let b = Vec3::new(1.2, 2.2, 3.2);
 
         assert_that(a, is(equal_to(b)));
-   }
+    }
 
     #[test]
     fn vec3_has_length() {

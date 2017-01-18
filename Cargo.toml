@@ -10,5 +10,5 @@ opt-level = 2
 hamcrest = "0.1"
 
 [dependencies]
-bmp = "0.1.4"
+bmp = "0.2"
 rand = "0.3.11"

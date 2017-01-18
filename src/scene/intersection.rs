@@ -4,7 +4,7 @@ use vec::Vec3;
 use ray::Ray;
 use color::Color;
 
-pub trait Intersectable : Debug {
+pub trait Intersectable: Debug {
     fn intersects(&self, ray: &Ray, t_min: f64, t_max: f64) -> Option<Intersection>;
 
     fn scatter(&self, _: &Ray, _: &Intersection) -> Option<(Color, Ray)> {

@@ -7,13 +7,13 @@ extern crate bmp;
 use std::f64;
 
 use bmp::Image;
-use rand::{ Rng };
+use rand::Rng;
 
 use vec::Vec3;
 use ray::Ray;
 use camera::Camera;
 use color::Color;
-use scene::{ Scene, Sphere, Intersectable };
+use scene::{Scene, Sphere, Intersectable};
 
 mod vec;
 mod ray;
@@ -27,7 +27,9 @@ fn gradient(point: Vec3) -> Color {
 }
 
 fn color(ray: &Ray, scene: &Scene, depth: u32) -> Color {
-    if depth == 50 { return Color::black(); }
+    if depth == 50 {
+        return Color::black();
+    }
 
     match scene.intersects(ray, 0.0, f64::MAX) {
         Some(ref intersection) => {
@@ -36,17 +38,23 @@ fn color(ray: &Ray, scene: &Scene, depth: u32) -> Color {
             } else {
                 Color::black()
             }
-        },
-        None => gradient(ray.direction.normalize())
+        }
+        None => gradient(ray.direction.normalize()),
     }
 }
 
-fn create_camera() -> Camera {
-    Camera::new(
-        Vec3::new(0.0, 0.0, 0.0),
-        Vec3::new(-2.0, -1.0, -1.0),
-        Vec3::new(4.0, 0.0, 0.0),
-        Vec3::new(0.0, 2.0, 0.0))
+fn create_camera(width: u32, height: u32) -> Camera {
+    let origin = Vec3::new(0.0, 0.5, 2.0);
+    let view_point = Vec3::new(0.0, 0.0, -1.0);
+    let dist_to_focus = (origin - view_point).length();
+    let aperture = 0.2;
+    Camera::new(origin,
+                view_point,
+                Vec3::new(0.0, 1.0, 0.0),
+                35.0,
+                width as f64 / height as f64,
+                aperture,
+                dist_to_focus)
 }
 
 fn create_scene() -> Scene {
@@ -68,13 +76,13 @@ fn main() {
     let num_samples = 50;
     let mut rng = rand::thread_rng();
 
-    let camera = create_camera();
+    let camera = create_camera(width, height);
     let scene = create_scene();
 
     let mut image = Image::new(width, height);
     for (x, y) in image.coordinates() {
         let mut c = Color::black();
-        for _ in 0 .. num_samples {
+        for _ in 0..num_samples {
             let u = (x as f64 + rng.next_f64()) / width as f64;
             let v = ((height - y - 1) as f64 + rng.next_f64()) / height as f64;
 

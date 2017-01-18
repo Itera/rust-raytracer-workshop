@@ -1,9 +1,9 @@
-use rand::{ self, Rng };
+use rand::{self, Rng};
 
 use vec::Vec3;
 use ray::Ray;
 use color::Color;
-use scene::intersection::{ Intersectable, Intersection };
+use scene::intersection::{Intersectable, Intersection};
 
 const INTERSECTION_ORIGIN_OFFSET: f64 = 0.00000001;
 
@@ -31,17 +31,22 @@ impl Intersectable for Sphere {
         let b: f64 = origin.dot(ray.direction);
         let c: f64 = origin.dot(origin) - self.radius * self.radius;
         let discriminant: f64 = b * b - a * c;
-        let intersection = |t| Some(Intersection::new(
-            t,
-            ray.point_along_direction(t),
-            (ray.point_along_direction(t) - self.origin) / self.radius,
-            self));
+        let intersection = |t| {
+            Some(Intersection::new(t,
+                                   ray.point_along_direction(t),
+                                   (ray.point_along_direction(t) - self.origin) / self.radius,
+                                   self))
+        };
         if discriminant > 0.0 {
             let temp = (-b - (b * b - a * c).sqrt()) / a;
-            if temp < t_max && temp > t_min { return intersection(temp); }
+            if temp < t_max && temp > t_min {
+                return intersection(temp);
+            }
 
             let temp = (-b + (b * b - a * c).sqrt()) / a;
-            if temp < t_max && temp > t_min { return intersection(temp); }
+            if temp < t_max && temp > t_min {
+                return intersection(temp);
+            }
             None
         } else {
             None
@@ -60,8 +65,11 @@ impl Intersectable for Sphere {
 fn random_point_in_unit_sphere() -> Vec3 {
     let mut rng = rand::thread_rng();
     loop {
-        let p = 2.0 * Vec3::new(rng.next_f64(), rng.next_f64(), rng.next_f64()) - Vec3::new(1.0, 1.0, 1.0);
-        if p.squared_length() < 1.0 { return p; }
+        let p = 2.0 * Vec3::new(rng.next_f64(), rng.next_f64(), rng.next_f64()) -
+                Vec3::new(1.0, 1.0, 1.0);
+        if p.squared_length() < 1.0 {
+            return p;
+        }
     }
 }
 
@@ -72,19 +80,21 @@ fn reflection_origin(intersection: &Intersection) -> Vec3 {
 
 #[cfg(test)]
 mod tests {
-    use hamcrest::{ assert_that, is, equal_to };
+    use hamcrest::{assert_that, is, equal_to};
 
     use vec::Vec3;
     use ray::Ray;
     use color::Color;
-    use scene::{ Sphere, Intersectable };
+    use scene::{Sphere, Intersectable};
 
     #[test]
     fn should_intersect_sphere() {
         let s = Sphere::new(Vec3::new(0.0, 0.0, -1.0), 1.0, Color::white());
 
-        let i = s.intersects(
-            &Ray::new(Vec3::new(0.0, 0.0, -1.0), Vec3::new(0.0, 0.0, 1.0))).unwrap();
+        let i = s.intersects(&Ray::new(Vec3::new(0.0, 0.0, -1.0), Vec3::new(0.0, 0.0, 1.0)),
+                        0.0,
+                        1000.0)
+            .unwrap();
 
         assert_that(i.t, is(equal_to(1.0)));
         assert_that(i.point, is(equal_to(Vec3::new(0.0, 0.0, 0.0))));
