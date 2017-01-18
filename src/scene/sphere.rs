@@ -7,7 +7,7 @@ use scene::intersection::{Intersectable, Intersection};
 
 const INTERSECTION_ORIGIN_OFFSET: f64 = 0.00000001;
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Sphere {
     pub origin: Vec3,
     pub radius: f64,
@@ -35,7 +35,7 @@ impl Intersectable for Sphere {
             Some(Intersection::new(t,
                                    ray.point_along_direction(t),
                                    (ray.point_along_direction(t) - self.origin) / self.radius,
-                                   self))
+                                   Box::new(self.clone())))
         };
         if discriminant > 0.0 {
             let temp = (-b - (b * b - a * c).sqrt()) / a;

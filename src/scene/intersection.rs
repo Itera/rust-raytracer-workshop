@@ -13,15 +13,15 @@ pub trait Intersectable: Debug {
 }
 
 #[derive(Debug)]
-pub struct Intersection<'a> {
+pub struct Intersection {
     pub t: f64,
     pub point: Vec3,
     pub normal: Vec3,
-    pub shape: &'a Intersectable,
+    pub shape: Box<Intersectable>,
 }
 
-impl<'a> Intersection<'a> {
-    pub fn new(t: f64, point: Vec3, normal: Vec3, shape: &'a Intersectable) -> Intersection {
+impl Intersection {
+    pub fn new(t: f64, point: Vec3, normal: Vec3, shape: Box<Intersectable>) -> Intersection {
         Intersection {
             t: t,
             point: point,
