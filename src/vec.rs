@@ -35,6 +35,10 @@ impl Vec3 {
         let z = self.x * vec.y - self.y * vec.x;
         Vec3::new(x, y, z)
     }
+
+    pub fn invert(&self) -> Vec3 {
+        Vec3::new(-self.x, -self.y, -self.z)
+    }
 }
 
 impl PartialEq for Vec3 {

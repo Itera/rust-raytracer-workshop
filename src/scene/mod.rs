@@ -1,21 +1,18 @@
 use ray::Ray;
 
 pub use self::sphere::Sphere;
-pub use self::intersection::{ Intersectable, Intersection };
+pub use self::intersection::{Intersectable, Intersection};
 
 pub mod sphere;
 pub mod intersection;
 
-#[derive(Debug)]
 pub struct Scene {
     pub shapes: Vec<Box<Intersectable>>,
 }
 
 impl Scene {
     pub fn new(shapes: Vec<Box<Intersectable>>) -> Scene {
-        Scene {
-            shapes: shapes,
-        }
+        Scene { shapes: shapes }
     }
 }
 
@@ -29,8 +26,8 @@ impl Intersectable for Scene {
                 Some(new_intersection) => {
                     closest_so_far = new_intersection.t;
                     intersection = Some(new_intersection);
-                },
-                None => ()
+                }
+                None => (),
             }
         }
         intersection

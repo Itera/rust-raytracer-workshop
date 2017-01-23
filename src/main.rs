@@ -33,10 +33,9 @@ fn color(ray: &Ray, scene: &Scene, depth: u32) -> Color {
 
     match scene.intersects(ray, 0.0, f64::MAX) {
         Some(ref intersection) => {
-            if let Some((attenuation, scattered)) = intersection.shape.scatter(ray, intersection) {
-                attenuation * color(&scattered, scene, depth + 1)
-            } else {
-                Color::black()
+            match intersection.shape.scatter(ray, intersection) {
+                Some((attenuation, scattered)) => attenuation * color(&scattered, scene, depth + 1),
+                None => Color::black(),
             }
         }
         None => gradient(ray.direction.normalize()),
@@ -59,6 +58,24 @@ fn create_camera(width: u32, height: u32) -> Camera {
 
 fn create_scene() -> Scene {
     Scene::new(vec![
+        Box::new(Sphere::refractive(
+            Vec3::new(0.5, -0.2, -0.4),
+            0.3,
+            Color::new(0.6, 0.3, 0.0),
+            1.5),
+        ),
+        Box::new(Sphere::reflective(
+            Vec3::new(1.2, 0.0, -1.0),
+            0.5,
+            Color::new(0.6, 0.3, 0.0),
+            0.0),
+        ),
+        Box::new(Sphere::refractive(
+            Vec3::new(-1.2, 0.0, -1.0),
+            0.5,
+            Color::new(0.7, 0.3, 0.7),
+            1.5),
+        ),
         Box::new(Sphere::new(
             Vec3::new(0.0, 0.0, -1.0),
             0.5,
