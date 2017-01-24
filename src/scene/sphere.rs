@@ -189,7 +189,7 @@ fn shlick(cosine: f64, refraction_index: f64) -> f64 {
 
 #[cfg(test)]
 mod tests {
-    use hamcrest::{assert_that, is, equal_to};
+    use hamcrest::prelude::*;
 
     use vec::Vec3;
     use ray::Ray;
@@ -205,8 +205,8 @@ mod tests {
                         1000.0)
             .unwrap();
 
-        assert_that(i.t, is(equal_to(1.0)));
-        assert_that(i.point, is(equal_to(Vec3::new(0.0, 0.0, 0.0))));
-        assert_that(i.normal, is(equal_to(Vec3::new(0.0, 0.0, 1.0))));
+        assert_that!(i.t, is(equal_to(1.0)));
+        assert_that!(i.point, is(equal_to(Vec3::new(0.0, 0.0, 0.0))));
+        assert_that!(i.normal, is(equal_to(Vec3::new(0.0, 0.0, 1.0))));
     }
 }

@@ -1,4 +1,5 @@
 #[cfg(test)]
+#[macro_use]
 extern crate hamcrest;
 
 extern crate rand;

@@ -7,8 +7,8 @@ authors = ["Sondre Lefsaker <sondre.lefsaker@itera.no>"]
 opt-level = 2
 
 [dev-dependencies]
-hamcrest = "0.1"
+hamcrest = "0.1.3"
 
 [dependencies]
 bmp = "0.2"
-rand = "0.3.11"
+rand = "0.3.15"

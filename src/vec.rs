@@ -119,7 +119,7 @@ impl Index<u32> for Vec3 {
 
 #[cfg(test)]
 mod tests {
-    use hamcrest::{assert_that, is, equal_to, close_to};
+    use hamcrest::prelude::*;
     use vec::Vec3;
 
     #[test]
@@ -129,9 +129,9 @@ mod tests {
 
         let c = a + b;
 
-        assert_that(c.x, is(equal_to(0.0)));
-        assert_that(c.y, is(equal_to(2.0)));
-        assert_that(c.z, is(equal_to(4.0)));
+        assert_that!(c.x, is(equal_to(0.0)));
+        assert_that!(c.y, is(equal_to(2.0)));
+        assert_that!(c.z, is(equal_to(4.0)));
     }
 
     #[test]
@@ -141,9 +141,9 @@ mod tests {
 
         let c = a - b;
 
-        assert_that(c.x, is(equal_to(0.0)));
-        assert_that(c.y, is(equal_to(0.0)));
-        assert_that(c.z, is(equal_to(0.0)));
+        assert_that!(c.x, is(equal_to(0.0)));
+        assert_that!(c.y, is(equal_to(0.0)));
+        assert_that!(c.z, is(equal_to(0.0)));
     }
 
     #[test]
@@ -153,9 +153,9 @@ mod tests {
 
         let c = a * b;
 
-        assert_that(c.x, is(equal_to(0.0)));
-        assert_that(c.y, is(equal_to(1.0)));
-        assert_that(c.z, is(equal_to(4.0)));
+        assert_that!(c.x, is(equal_to(0.0)));
+        assert_that!(c.y, is(equal_to(1.0)));
+        assert_that!(c.z, is(equal_to(4.0)));
     }
 
     #[test]
@@ -164,9 +164,9 @@ mod tests {
 
         let c = a * 2.0;
 
-        assert_that(c.x, is(equal_to(0.0)));
-        assert_that(c.y, is(equal_to(2.0)));
-        assert_that(c.z, is(equal_to(4.0)));
+        assert_that!(c.x, is(equal_to(0.0)));
+        assert_that!(c.y, is(equal_to(2.0)));
+        assert_that!(c.z, is(equal_to(4.0)));
     }
 
     #[test]
@@ -174,7 +174,7 @@ mod tests {
         let a = Vec3::new(1.2, 2.2, 3.2);
         let b = Vec3::new(1.2, 2.2, 3.2);
 
-        assert_that(a, is(equal_to(b)));
+        assert_that!(a, is(equal_to(b)));
     }
 
     #[test]
@@ -183,7 +183,7 @@ mod tests {
 
         let l = a.length();
 
-        assert_that(l, is(close_to(4.06448, 0.00001)));
+        assert_that!(l, is(close_to(4.06448, 0.00001)));
     }
 
     #[test]
@@ -192,15 +192,15 @@ mod tests {
 
         let v = v.normalize();
 
-        assert_that(v.x, is(close_to(0.424264, 0.00001)));
+        assert_that!(v.x, is(close_to(0.424264, 0.00001)));
     }
 
     #[test]
     fn vec3_can_be_indexed() {
         let a = Vec3::new(1.0, 2.0, 3.0);
 
-        assert_that(a.x, is(equal_to(1.0)));
-        assert_that(a.y, is(equal_to(2.0)));
-        assert_that(a.z, is(equal_to(3.0)));
+        assert_that!(a.x, is(equal_to(1.0)));
+        assert_that!(a.y, is(equal_to(2.0)));
+        assert_that!(a.z, is(equal_to(3.0)));
     }
 }
