@@ -1,8 +1,7 @@
 use std::f64::consts::PI;
 use rand::{self, Rng};
 
-use vec::Vec3;
-use ray::Ray;
+use prelude::*;
 
 #[derive(Clone, Debug)]
 pub struct Camera {
@@ -10,8 +9,8 @@ pub struct Camera {
     lower_left_corner: Vec3,
     horizontal: Vec3,
     vertical: Vec3,
-    v: Vec3,
     u: Vec3,
+    v: Vec3,
     lens_radius: f64,
 }
 
@@ -19,21 +18,22 @@ impl Camera {
     pub fn new(origin: Vec3,
                view_point: Vec3,
                orthogonal_up: Vec3,
-               vertical_fov: f64,
+               vertical_field_of_view: f64,
                aspect_ratio: f64,
                aperture: f64,
-               focal_dist: f64)
+               distance_to_focus: f64)
                -> Camera {
-        let theta = vertical_fov * PI / 180.0;
+        let theta = vertical_field_of_view * PI / 180.0;
         let half_height = (theta / 2.0).tan();
         let half_width = aspect_ratio * half_height;
         let w = (origin - view_point).normalize();
         let u = (orthogonal_up.cross(w)).normalize();
         let v = w.cross(u);
-        let lower_left_corner =
-            origin - half_width * focal_dist * u - half_height * focal_dist * v - focal_dist * w;
-        let horizontal = 2.0 * half_width * focal_dist * u;
-        let vertical = 2.0 * half_height * focal_dist * v;
+        let lower_left_corner = origin - half_width * distance_to_focus * u -
+                                half_height * distance_to_focus * v -
+                                distance_to_focus * w;
+        let horizontal = 2.0 * half_width * distance_to_focus * u;
+        let vertical = 2.0 * half_height * distance_to_focus * v;
         Camera {
             origin: origin,
             lower_left_corner: lower_left_corner,

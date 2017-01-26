@@ -1,13 +1,13 @@
-use std::ops::{ Add, Mul, Div };
+use std::ops::{Add, Mul, Div};
 use std::convert::Into;
 
 use bmp::Pixel;
 
 #[derive(Clone, Copy, PartialEq, Debug)]
 pub struct Color {
-     pub r: f64,
-     pub g: f64,
-     pub b: f64
+    pub r: f64,
+    pub g: f64,
+    pub b: f64,
 }
 
 impl Color {
@@ -16,23 +16,43 @@ impl Color {
     }
 
     pub fn black() -> Color {
-        Color { r: 0.0, g: 0.0, b: 0.0 }
+        Color {
+            r: 0.0,
+            g: 0.0,
+            b: 0.0,
+        }
     }
 
     pub fn white() -> Color {
-        Color { r: 1.0, g: 1.0, b: 1.0 }
+        Color {
+            r: 1.0,
+            g: 1.0,
+            b: 1.0,
+        }
     }
 
     pub fn red() -> Color {
-        Color { r: 1.0, g: 0.0, b: 0.0 }
+        Color {
+            r: 1.0,
+            g: 0.0,
+            b: 0.0,
+        }
     }
 
     pub fn green() -> Color {
-        Color { r: 0.0, g: 1.0, b: 0.0 }
+        Color {
+            r: 0.0,
+            g: 1.0,
+            b: 0.0,
+        }
     }
 
     pub fn blue() -> Color {
-        Color { r: 0.0, g: 0.0, b: 1.0 }
+        Color {
+            r: 0.0,
+            g: 0.0,
+            b: 1.0,
+        }
     }
 
     pub fn gamma2(&self) -> Color {
