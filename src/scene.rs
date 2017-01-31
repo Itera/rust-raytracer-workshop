@@ -7,6 +7,8 @@ pub trait Intersectable: Sync {
     fn scatter(&self, _: &Ray, _: &Intersection) -> Option<(Color, Ray)> {
         None
     }
+
+    fn move_to(&self, vec: Vec3) -> Box<Intersectable>;
 }
 
 pub struct Intersection {
@@ -57,6 +59,10 @@ impl Intersectable for Scene {
         }
         intersection
     }
+
+    fn move_to(&self, _: Vec3) -> Box<Intersectable> {
+        Box::new(Scene::new(vec![]))
+    }
 }
 
 #[derive(Clone)]
@@ -98,6 +104,8 @@ impl Sphere {
             refraction_index: Some(refraction_index),
         }
     }
+
+
 }
 
 impl Intersectable for Sphere {
@@ -131,6 +139,16 @@ impl Intersectable for Sphere {
         } else {
             scatter::diffusive(self.color, intersection)
         }
+    }
+
+    fn move_to(&self, vec: Vec3) -> Box<Intersectable> {
+        Box::new(Sphere {
+            origin: vec,
+            radius: self.radius,
+            color: self.color,
+            diffusiveness: self.diffusiveness,
+            refraction_index: self.refraction_index,
+        })
     }
 }
 

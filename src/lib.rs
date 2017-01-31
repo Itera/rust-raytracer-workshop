@@ -19,6 +19,8 @@ mod ray;
 mod color;
 mod camera;
 mod scene;
+mod matrix;
+mod animate;
 
 #[cfg(test)]
 mod tests;
@@ -26,9 +28,11 @@ mod tests;
 pub mod prelude {
     pub use ray::Ray;
     pub use vec::Vec3;
+    pub use matrix::Matrix4;
     pub use color::Color;
     pub use camera::Camera;
     pub use scene::{Scene, Sphere, Intersectable};
+    pub use animate::{animate, Keyframes, Keyframe};
 }
 
 pub fn trace_scene(width: u32,
