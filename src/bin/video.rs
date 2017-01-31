@@ -1,8 +1,9 @@
 extern crate raytracer;
-extern crate bmp;
+extern crate gif;
 
 use raytracer::prelude::*;
-use bmp::{Image, Pixel};
+use gif::{Frame, Encoder, Repeat, SetParameter};
+use std::fs::File;
 
 fn create_camera(width: u32, height: u32) -> Camera {
     let origin = Vec3::new(0.0, 1.0, 2.0);
@@ -87,27 +88,30 @@ fn main() {
     let orginal_scene = create_scene();
     let frames = create_frames();
 
+    let mut image = File::create("video.gif").unwrap();
+    let mut encoder = Encoder::new(&mut image, width as u16, height as u16, &[]).unwrap();
+    encoder.set(Repeat::Infinite).unwrap();
+
     for i in 0..50 {
         let (scene, camera) = animate(&orginal_scene, &orginal_camera, &frames, i);
-        let pixels = raytracer::trace_scene(width, height, number_of_samples, &camera, &scene);
-        pixel_array_to_image(i, width, height, pixels)
+
+        let mut pixels = pixels_to_vec(raytracer::trace_scene(width, height, number_of_samples, &camera, &scene));
+
+        let frame = Frame::from_rgb(width as u16, height as u16, &mut *pixels);
+
+        // Write frame to file
+        encoder.write_frame(&frame).unwrap();
     }
 }
 
-fn pixel_array_to_image(t: usize, width: u32, height: u32, pixels: Vec<Color>) {
-    let mut image = Image::new(width, height);
-    for y in 0..height {
-        for x in 0..width {
-            image.set_pixel(x,
-                            height - y - 1,
-                            to_pixel(pixels[(y * width + x) as usize].gamma2()));
-        }
-    }
-    let _ = image.save(format!("scenes/scene-{:03}.bmp", t).as_str());
-}
+fn pixels_to_vec(pixels: Vec<Color>) -> Vec<u8> {
+    let mut vec : Vec<u8> = Vec::with_capacity(pixels.len() * 3);
 
-fn to_pixel(color: Color) -> Pixel {
-    Pixel::new((255.99 * color.r) as u8,
-               (255.99 * color.g) as u8,
-               (255.99 * color.b) as u8)
+    for Color {r, g, b} in pixels {
+        vec.push((r * 255.0) as u8);
+        vec.push((g * 255.0) as u8);
+        vec.push((b * 255.0) as u8);
+    }
+
+    return vec;
 }
