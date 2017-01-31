@@ -136,7 +136,8 @@ impl Intersectable for Sphere {
 
 fn create_intersection(sphere: &Sphere, point: f64, ray: &Ray) -> Option<Intersection> {
     let intersection_point = ray.point_along_direction(point);
-    let surface_normal = (intersection_point - sphere.origin) / sphere.radius;
+    let surface_normal = panic!("Step 3b) Calculate the surface normal. Hint: The formula is \
+                                 available in the README");
     Some(Intersection::new(point,
                            intersection_point,
                            surface_normal,

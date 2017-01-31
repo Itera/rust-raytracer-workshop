@@ -13,18 +13,20 @@ We can use the light gathered by the randomly scattered rays through our scene, 
 <img src="ray-tracer.png" width="500px" alt="Ray tracer" style="display: block; margin: 0 auto;" />
 
 This workshop contains a partly implemented ray tracer that is written in Rust.
-Your goal is to finish the tasks that will bring you through the different steps that are necessary to get a basic ray tracer up and running, and by the end of the workshop you should be able to get some nice looking images!
+Your goal is to finish the tasks that will bring you through the different steps necessary for a basic ray tracer, and by the end of the workshop you should be able to generate some nice looking images!
 
 ## Step 1 - Vectors
 At the core of a ray tracer lies vector operations.
 This includes addition between vectors and scalars, and other operations like multiplication and division.
 The `Vec3` class (a 3-dimensional vector) is implemented in the `src/vec.rs` file, and it contains most of the vector operations that we need for our ray tracer.
 
-**Your goal** for this first task is to implement the missing vector operations!
+**Step 1** of our ray tracer is to implement the missing vector operations!
+Go to `src/vec.rs` and look for the code that starts with `panic!("Step 1...")`.
+`panic!` is a Rust macro (you can see that by the exclamation mark), and Rust will exit the program immediately when it is encountered at run-time.
 
 *Hint: You can look at the implementation of the other vector operations in the file if you're not sure about the implementation details.*
 
-**Verification step:** run the `cargo test` command and verify that all tests labelled `test_1...` run successfully.
+**Verification step:** run the `cargo test` command and verify that all tests labeled `test_1...` run successfully.
 
 ## Step 2 - A gradient image
 Now that we have implemented the core math our ray tracer, it is time to generate an image - we will start by implementing a simple gradient "sky" for our scene.
