@@ -49,7 +49,7 @@ pub fn trace_scene(width: u32,
             let mut color = Color::black();
             for _ in 0..num_samples {
                 let u = (x_trans + rng.next_f64()) / width as f64;
-                let v = (y_trans + rng.next_f64()) / height as f64;
+                let v = ((height as f64 - y_trans - 1.0) + rng.next_f64()) / height as f64;
 
                 let ray = camera.create_ray(u, v);
                 color = color + trace_ray_in_scene(&ray, scene, 0);

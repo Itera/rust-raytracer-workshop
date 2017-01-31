@@ -72,9 +72,7 @@ fn pixel_array_to_image(width: u32, height: u32, pixels: Vec<Color>) {
     let mut image = Image::new(width, height);
     for y in 0..height {
         for x in 0..width {
-            image.set_pixel(x,
-                            height - y - 1,
-                            to_pixel(pixels[(y * width + x) as usize].gamma2()));
+            image.set_pixel(x, y, to_pixel(pixels[(y * width + x) as usize].gamma2()));
         }
     }
     let _ = image.save("scene.bmp");
