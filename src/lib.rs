@@ -10,7 +10,6 @@ extern crate bmp;
 extern crate rayon;
 
 use std::f64;
-use bmp::Image;
 use rand::Rng;
 use prelude::*;
 
@@ -37,31 +36,31 @@ pub fn trace_scene(width: u32,
                    num_samples: u32,
                    camera: &Camera,
                    scene: &Scene)
-                   -> Image {
+                   -> Vec<Color> {
     let mut rng = rand::thread_rng();
-    let mut image = Image::new(width, height);
-    for (x, y) in image.coordinates() {
-        let (x_trans, y_trans) = (x as f64, (height - y - 1) as f64);
-        let mut color = Color::black();
-        for _ in 0..num_samples {
-            let u = (x_trans + rng.next_f64()) / width as f64;
-            let v = (y_trans + rng.next_f64()) / height as f64;
+    let mut pixels = Vec::with_capacity((width * height) as usize);
+    for y in 0..height {
+        for x in 0..width {
+            let (x_trans, y_trans) = (x as f64, y as f64);
+            let mut color = Color::black();
+            for _ in 0..num_samples {
+                let u = (x_trans + rng.next_f64()) / width as f64;
+                let v = (y_trans + rng.next_f64()) / height as f64;
 
-            let ray = camera.create_ray(u, v);
-            color = color + trace_ray_in_scene(&ray, scene, 0);
-            // color = panic!("Step 2b) Call the 'trace_ray_in_scene' function with the appropriate parameters");
+                let ray = camera.create_ray(u, v);
+                color = color + trace_ray_in_scene(&ray, scene, 0);
+            }
+            color = color / num_samples as f64;
+            pixels.push(color);
         }
-        color = color / num_samples as f64;
-        image.set_pixel(x, y, color.gamma2().into());
     }
-    image
+    pixels
 }
 
 fn trace_ray_in_scene(ray: &Ray, scene: &Scene, depth: u32) -> Color {
     if depth == 50 {
         return Color::black(); // Return black to avoid being stuck with an unlimited recursion
     }
-    // _ => panic!("Step 2b) Return a gradient by calling the 'gradient' function, passing the ray as parameter")
     match scene.intersects(ray, 0.0, f64::MAX) {
         Some(intersection) => {
             match intersection.shape.scatter(ray, &intersection) {

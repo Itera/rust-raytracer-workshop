@@ -1,6 +1,8 @@
 extern crate raytracer;
+extern crate bmp;
 
 use raytracer::prelude::*;
+use bmp::{Image, Pixel};
 
 fn create_camera(width: u32, height: u32) -> Camera {
     let origin = Vec3::new(0.0, 1.0, 2.0);
@@ -10,7 +12,6 @@ fn create_camera(width: u32, height: u32) -> Camera {
     let aspect_ratio = width as f64 / height as f64;
     let aperture = 0.0;
     let distance_to_focus = (origin - view_point).length();
-    // panic!("Step 2a) Initialize and return a new Camera by calling its 'new' function with the parameters defined above");
     Camera::new(origin,
                 view_point,
                 orthogonal_up,
@@ -59,17 +60,28 @@ fn create_scene() -> Scene {
 
 
 fn main() {
-    let (width, height, number_of_samples) = (
-        // panic!("Step 2a) Initialize a camera with width = 600"),
-        600,
-        // panic!("Step 2a) Initialize a camera with height = 300"),
-        300,
-        50
-    );
+    let (width, height, number_of_samples) = (600, 300, 1);
     let camera = create_camera(width, height);
     let scene = create_scene();
 
-    let image = raytracer::trace_scene(width, height, number_of_samples, &camera, &scene);
+    let pixels = raytracer::trace_scene(width, height, number_of_samples, &camera, &scene);
+    pixel_array_to_image(width, height, pixels)
+}
 
+fn pixel_array_to_image(width: u32, height: u32, pixels: Vec<Color>) {
+    let mut image = Image::new(width, height);
+    for y in 0..height {
+        for x in 0..width {
+            image.set_pixel(x,
+                            height - y - 1,
+                            to_pixel(pixels[(y * width + x) as usize].gamma2()));
+        }
+    }
     let _ = image.save("scene.bmp");
+}
+
+fn to_pixel(color: Color) -> Pixel {
+    Pixel::new((255.99 * color.r) as u8,
+               (255.99 * color.g) as u8,
+               (255.99 * color.b) as u8)
 }

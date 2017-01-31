@@ -16,7 +16,5 @@ impl Ray {
 
     pub fn point_along_direction(&self, point: f64) -> Vec3 {
         self.origin + self.direction * point
-        // panic!("Step 3a) Calculate the point along the direction of the ray. Hint: Remember to \
-        //         take the origin of the ray into the account of the final point")
     }
 }
