@@ -38,9 +38,25 @@ mod step_1 {
 
 }
 
+mod step_2 {
+    use hamcrest::prelude::*;
+    use prelude::*;
+
+    #[test]
+    fn a_trace_ray_in_scene_should_return_gradient() {
+        let scene = Scene::new(vec![]);
+        let ray = Ray::new(Vec3::new(0.0, 0.0, -1.0), Vec3::new(0.0, 0.0, 1.0));
+
+        let color = ::trace_ray_in_scene(&ray, &scene, 0);
+
+        assert_that!(color, is(equal_to(::gradient(&ray))));
+    }
+}
+
 mod step_3 {
     use hamcrest::prelude::*;
     use prelude::*;
+
     #[test]
     fn a_ray_should_calculate_point_along_its_direction() {
         let origin = Vec3::new(1.0, -2.0, 0.0);
