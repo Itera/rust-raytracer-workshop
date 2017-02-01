@@ -122,7 +122,7 @@ We are now almost done with the implementation of our ray tracer!
 Now, instead of returning `Color::black()` when your ray intersects with the scene, call the `scatter()` function like so: `intersection.shape.scatter(ray, &intersection)`.
 
 **Step 4a** - remember that the call to `scatter()` returns an `Option<(Color, Ray)>`?
-You need to handle this value similarly to what you did in **Step 3c** - return this color instead of black when `scatter()` returns `Some` value, but you can still return black the value returned from `scatter()` is `None`.
+You need to handle this value similarly to what you did in **Step 3c** - return this color instead of black when `scatter()` returns `Some` value, but you can still return black when the value returned from `scatter()` is `None`.
 
 *What does your picture look like now? You should be able to see some pretty sorry looking `Spheres`!*
 
