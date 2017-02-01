@@ -58,11 +58,9 @@ fn create_scene() -> Scene {
 
 
 fn main() {
-    let (width, height, number_of_samples) =
-        (panic!("Step 2a) Initialize a camera with width = 600"),
-         panic!("Step 2a) Initialize a camera with height = 300"),
-         1);
-    let camera = create_camera(width, height);
+    let (width, height, number_of_samples) = (600, 300, 1);
+    let camera = panic!("Step 2a) Initialize a camera by calling the 'create_camera()' \
+                         function with the width and height defined above");
     let scene = create_scene();
 
     let pixels = raytracer::trace_scene(width, height, number_of_samples, &camera, &scene);
@@ -73,7 +71,9 @@ fn pixel_array_to_image(width: u32, height: u32, pixels: Vec<Color>) {
     let mut image = Image::new(width, height);
     for y in 0..height {
         for x in 0..width {
-            image.set_pixel(x, y, to_pixel(pixels[(y * width + x) as usize].gamma2()));
+            image.set_pixel(x,
+                            height - y - 1,
+                            to_pixel(pixels[(y * width + x) as usize]));
         }
     }
     let _ = image.save("scene.bmp");

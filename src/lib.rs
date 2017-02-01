@@ -52,11 +52,11 @@ pub fn trace_scene(width: u32,
                 let v = ((height as f64 - y_trans - 1.0) + rng.next_f64()) / height as f64;
 
                 let ray = camera.create_ray(u, v);
-            color = panic!("Step 2b) Call the 'trace_ray_in_scene' function with the appropriate \
-                            parameters");
+                color = panic!("Step 2b) Call the 'trace_ray_in_scene' function with the \
+                                appropriate parameters");
             }
             color = color / num_samples as f64;
-            pixels.push(color);
+            pixels.push(color.gamma2());
         }
     }
     pixels
