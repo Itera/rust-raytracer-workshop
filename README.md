@@ -17,6 +17,9 @@ Your goal is to finish the tasks that will bring you through the different steps
 
 ## Setup
 The first thing you need to do is to install Rust, you can find the installation instructions [here](https://www.rust-lang.org/en-US/install.html).
+There are language support in most major text editors, and in some IDEs.
+Check out [Are we IDE yet](https://areweideyet.com/) for a list of plugin support for your favorite editor.
+The only thing you really need is syntax highlighting for the `.rs` file extension.
 
 By default the latest version of Rust will be installed, together with the latest version of Cargo.
 Cargo is the build tool and package manager for rust, it lets us build libraries and executables, and run tests and the executables we have defined in the project.
