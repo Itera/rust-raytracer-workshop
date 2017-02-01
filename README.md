@@ -43,7 +43,7 @@ Go to `src/vec.rs` and look for the code that starts with `panic!("Step 1...")`.
 *Hint: You can look at the implementation of the other vector operations in the file if you're not sure about the implementation details.*
 
 **Verification step:**
-* run the `cargo test` command and verify that all tests labeled `test_1...` run successfully.
+* run the `cargo test` command and verify that all tests labeled `step_1...` run successfully.
 
 ## Step 2 - A gradient image
 Now that we have implemented the core math our ray tracer, it is time to generate an image - we will start by implementing a simple gradient "sky" for our scene.
