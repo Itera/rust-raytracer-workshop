@@ -12,20 +12,20 @@ pub trait Intersectable: Sync {
 }
 
 pub struct Intersection {
-    pub point: f64,
+    pub distance: f64,
     pub intersection_point: Vec3,
     pub normal: Vec3,
     pub shape: Box<Intersectable>,
 }
 
 impl Intersection {
-    pub fn new(point: f64,
+    pub fn new(distance: f64,
                intersection_point: Vec3,
                normal: Vec3,
                shape: Box<Intersectable>)
                -> Intersection {
         Intersection {
-            point: point,
+            distance: distance,
             intersection_point: intersection_point,
             normal: normal,
             shape: shape,
@@ -51,7 +51,7 @@ impl Intersectable for Scene {
         for shape in self.shapes.iter() {
             match shape.intersects(ray, t_min, closest_so_far) {
                 Some(other_intersection) => {
-                    closest_so_far = other_intersection.point;
+                    closest_so_far = other_intersection.distance;
                     intersection = Some(other_intersection);
                 }
                 None => (),
@@ -116,14 +116,14 @@ impl Intersectable for Sphere {
         let c: f64 = translated_origin.dot(translated_origin) - self.radius * self.radius;
         let discriminant: f64 = b * b - a * c;
         if discriminant > 0.0 {
-            let point = (-b - (b * b - a * c).sqrt()) / a;
-            if point < t_max && point > t_min {
-                return create_intersection(self, point, ray);
+            let delta = (-b - (b * b - a * c).sqrt()) / a;
+            if delta < t_max && delta > t_min {
+                return create_intersection(self, delta, ray);
             }
 
-            let point = (-b + (b * b - a * c).sqrt()) / a;
-            if point < t_max && point > t_min {
-                return create_intersection(self, point, ray);
+            let delta = (-b + (b * b - a * c).sqrt()) / a;
+            if delta < t_max && delta > t_min {
+                return create_intersection(self, delta, ray);
             }
             None
         } else {
@@ -152,11 +152,11 @@ impl Intersectable for Sphere {
     }
 }
 
-fn create_intersection(sphere: &Sphere, point: f64, ray: &Ray) -> Option<Intersection> {
-    let intersection_point = ray.point_along_direction(point);
+fn create_intersection(sphere: &Sphere, delta: f64, ray: &Ray) -> Option<Intersection> {
+    let intersection_point = ray.point_along_direction(delta);
     let surface_normal = panic!("Step 3b) Calculate the surface normal. Hint: The formula is \
                                  available in the README");
-    Some(Intersection::new(point,
+    Some(Intersection::new(delta,
                            intersection_point,
                            surface_normal,
                            Box::new(sphere.clone())))

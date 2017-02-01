@@ -43,7 +43,7 @@ mod step_2 {
     use prelude::*;
 
     #[test]
-    fn a_trace_ray_in_scene_should_return_gradient() {
+    fn trace_ray_in_scene_should_return_gradient() {
         let scene = Scene::new(vec![]);
         let ray = Ray::new(Vec3::new(0.0, 0.0, -1.0), Vec3::new(0.0, 0.0, 1.0));
 
@@ -74,7 +74,7 @@ mod step_3 {
 
         let i = sphere.intersects(&ray, 0.0, 1000.0).unwrap();
 
-        assert_that!(i.point, is(equal_to(1.0)));
+        assert_that!(i.distance, is(equal_to(1.0)));
         assert_that!(i.intersection_point, is(equal_to(Vec3::new(0.0, 0.0, 0.0))));
         assert_that!(i.normal, is(equal_to(Vec3::new(0.0, 0.0, 1.0))));
     }
