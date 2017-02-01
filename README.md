@@ -56,6 +56,7 @@ Finally, it takes these color values and converts them to a BMP image that it sa
 **Step 2b**, head to the `src/lib.rs` and navigate to the `trace_scene()` library function - this function contains the main loop of the ray tracer.
 This is where we initialize the color vector (`Vec<Color>`), and the for each `x` and `y` coordinate of the image we cast a new ray from the camera and into the scene by calling the `trace_ray_in_scene()` function (see the picture in the top of the README for an illustration).
 As you can see, our work here is not yet done, you need to make sure the `trace_ray_in_scene()` function actually gets called and returns the gradient!
+**Note:** You can set the `depth` parameter to 0, we will increment this later.
 
 **Verification steps:**
 * run the `cargo test` command and verify that the tests labeled `step_2...` run successfully.
