@@ -8,7 +8,7 @@ use raytracer::prelude::*;
 use bmp::{Image, Pixel};
 
 fn create_camera(width: u32, height: u32) -> Camera {
-    let origin = Vec3::new(0.0, 1.0, 2.0);
+    let origin = Vec3::new(0.0, 0.0, 2.0);
     let view_point = Vec3::new(0.0, 0.0, -1.0);
     let orthogonal_up = Vec3::new(0.0, 1.0, 0.0);
     let vertical_field_of_view = 35.0;
@@ -73,9 +73,7 @@ fn pixel_array_to_image(width: u32, height: u32, pixels: Vec<Color>) {
     let mut image = Image::new(width, height);
     for y in 0..height {
         for x in 0..width {
-            image.set_pixel(x,
-                            height - y - 1,
-                            to_pixel(pixels[(y * width + x) as usize].gamma2()));
+            image.set_pixel(x, y, to_pixel(pixels[(y * width + x) as usize].gamma2()));
         }
     }
     let _ = image.save("scene.bmp");

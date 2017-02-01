@@ -19,6 +19,8 @@ mod ray;
 mod color;
 mod camera;
 mod scene;
+mod matrix;
+mod animate;
 
 #[cfg(test)]
 mod tests;
@@ -26,9 +28,11 @@ mod tests;
 pub mod prelude {
     pub use ray::Ray;
     pub use vec::Vec3;
+    pub use matrix::Matrix4;
     pub use color::Color;
     pub use camera::Camera;
     pub use scene::{Scene, Sphere, Intersectable};
+    pub use animate::{animate, Keyframes, Keyframe};
 }
 
 pub fn trace_scene(width: u32,
@@ -45,7 +49,7 @@ pub fn trace_scene(width: u32,
             let mut color = Color::black();
             for _ in 0..num_samples {
                 let u = (x_trans + rng.next_f64()) / width as f64;
-                let v = (y_trans + rng.next_f64()) / height as f64;
+                let v = ((height as f64 - y_trans - 1.0) + rng.next_f64()) / height as f64;
 
                 let ray = camera.create_ray(u, v);
             color = panic!("Step 2b) Call the 'trace_ray_in_scene' function with the appropriate \
