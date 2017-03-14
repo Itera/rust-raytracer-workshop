@@ -1,5 +1,7 @@
 # Ray tracing in Rust
 
+[![Join the chat at https://gitter.im/Itera/rust-raytracer-workshop](https://badges.gitter.im/Itera/rust-raytracer-workshop.svg)](https://gitter.im/Itera/rust-raytracer-workshop?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 The goal of this workshop is to introduce you to two (hopefully) new things.
 
 1. The Rust programming language
