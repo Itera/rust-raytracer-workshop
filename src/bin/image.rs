@@ -72,7 +72,7 @@ fn pixel_array_to_image(width: u32, height: u32, pixels: Vec<Color>) {
     for y in 0..height {
         for x in 0..width {
             image.set_pixel(x,
-                            height - y - 1,
+                            y,
                             to_pixel(pixels[(y * width + x) as usize]));
         }
     }
