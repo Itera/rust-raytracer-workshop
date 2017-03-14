@@ -16,7 +16,9 @@ This workshop contains a partly implemented ray tracer that is written in Rust.
 Your goal is to finish the tasks that will bring you through the different steps necessary for a basic ray tracer, and by the end of the workshop you should be able to generate some nice looking images!
 
 ## Setup
-The first thing you need to do is to install Rust, you can find the installation instructions [here](https://www.rust-lang.org/en-US/install.html).
+The first thing you need to do (if you haven't already) is to install Rust, you can find the installation instructions [here](https://www.rust-lang.org/en-US/install.html).
+**Note for Windows users:** you also need to install the [VS C++ toolchain](http://landinghub.visualstudio.com/visual-cpp-build-tools).
+
 There are language support in most major text editors, and in some IDEs.
 Check out [Are we IDE yet](https://areweideyet.com/) for a list of plugin support for your favorite editor.
 The only thing you really need is syntax highlighting for the `.rs` file extension.
@@ -31,14 +33,18 @@ You should run this command while you solve the assignments, they should indicat
 * `cargo run --bin image` - this command builds the project *and* runs the executable file found in `src/bin/image.rs` (this file contains a `main()` function, and is therefore an executable).
 You should run this command (starting from **Step 2**), as it will produce the rendered image of our scene.
 
+That should be all the setup we need.
+Reach for one of the instructors if you have any questions or if you've encountered any issues so far.
+Let's get started! :)
+
 ## Step 1 - Vectors
 At the core of any ray tracer lies vector operations.
 This includes addition between vectors and scalars, and other operations like multiplication and division.
 The `Vec3` class (a 3-dimensional vector) is implemented in the `src/vec.rs` file, and it contains most of the vector operations that we need for our ray tracer.
 
 **Step 1** of our ray tracer is to implement the missing vector operations!
-Go to `src/vec.rs` and look for the code that starts with `panic!("Step 1...")`.
-`panic!` is a [Rust macro](https://doc.rust-lang.org/beta/book/macros.html) (you can see that by the exclamation mark), and Rust will exit the program immediately when it is encountered at run-time.
+Go to `src/vec.rs` and look for the code that starts with `panic!("Step 1...")`, each assignment is described here.
+`panic!` is a [Rust macro](https://doc.rust-lang.org/beta/book/macros.html) (you can see that by the exclamation mark), and Rust will exit the program immediately when it encounters one of these at run-time.
 
 *Hint: You can look at the implementation of the other vector operations in the file if you're not sure about the implementation details.*
 
@@ -65,13 +71,14 @@ Does it?
 If so, navigate to the project directory and open the `scene.bmp` image.
 **The image should be a gradient of light blue and white.**
 
-*Does it not run without panicking? Then look over and make sure that all panics marked `Step 2...` have been fixed, or contact one of the helpful persons to help you!*
+*Does it not run without panicking? Then look over and make sure that all panics marked `Step 2...` have been fixed, or contact one of the helpful instructors to help you!*
 
 ## Step 3 - Intersection between Rays and Spheres
 
 Even though we now have an image, it is not very exciting to look at.
 The next essential step of a ray tracer is `Ray`-`Intersectable` intersection!
 Without it, we will not be able to display our `Intersectables` and their colors.
+**Note:** In our ray tracer, an `Intersectable` is just a simple sphere.
 
 Open the `src/scene.rs` file and take a couple of moments to reflect over the `Intersectable` trait found in the top of the file.
 We can see that the trait contains two function signatures that are important to the core of the ray tracing algorithm:
@@ -81,13 +88,16 @@ The returned `Intersection` contains the intersection point, the surface normal 
 
 Further down in this file we can see two structs that implement this trait; the `Scene` and the `Sphere`.
 The `Scene` simply loops over all its `Intersectable`'s and returns the one that is closest to the origin of the `Ray`.
-The `Sphere` intersection is mostly implemented, but you have to do the math for the `Intersection`.
+The `Sphere` intersection is mostly implemented, but you have to do the math for the `Intersection`!
 
 **Step 3a**, complete the implementation of the `point_along_direction()` function on the `Ray` struct found in `src/ray.rs`.
+The implementation is illustrated below.
+
+<img src="imgs/point-along-direction.png" width="600px" alt="Calculate the point along direction" style="display: block; margin: 0 auto;" />
 
 **Step 3b**, complete the implementation of the surface normal in the `create_intersection()` function according to the illustration below.
 
-<img src="imgs/surface-normal.jpeg" width="500px" alt="Calculate surface normal" style="display: block; margin: 0 auto;" />
+<img src="imgs/surface-normal-calculation.png" width="600px" alt="Calculate surface normal" style="display: block; margin: 0 auto;" />
 
 **Step 3c**, now that we have done the necessary calculations, we need to actually trigger the `Intersection` between the initial `Ray` and the `Scene`.
 Open `src/lib.rs` and navigate back to the `trace_ray_in_scene()` function.
@@ -133,7 +143,7 @@ All you need to do is to multiply the *scattered color* with the new color value
 
 *The picture should begin look pretty good, albeit a little grainy.*
 
-**Step 4c**, we have a very easy fix for this:
+**Step 4c**, we have a very easy fix to make the pictures a little less grainy:
 Open up `src/bin/image.rs` and give `num_samples` a higher value than 1, what about 100?
 **Or if you're feeling ambitious** you can set it to 1000 - but be warned, it might take a little while!
 
