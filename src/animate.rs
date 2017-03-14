@@ -82,7 +82,6 @@ impl Keyframes {
 
                 let delta = next_vec - prev_vec;
 
-                println!("cam: {:?}", prev_vec + (delta * p));
                 return prev_vec + (delta * p);
             }
         }
@@ -103,7 +102,6 @@ impl Keyframes {
 
                 let delta = next_vec - prev_vec;
 
-                println!("look: {:?}", prev_vec + (delta * p));
                 return prev_vec + (delta * p);
             }
         }
