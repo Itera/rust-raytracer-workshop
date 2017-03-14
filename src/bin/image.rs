@@ -15,8 +15,15 @@ fn create_camera(width: u32, height: u32) -> Camera {
     let aspect_ratio = width as f64 / height as f64;
     let aperture = 0.0;
     let distance_to_focus = (origin - view_point).length();
-    panic!("Step 2a) Initialize and return a new Camera by calling its 'new' function with the \
-            parameters defined above");
+    Camera::new(origin,
+               view_point,
+               orthogonal_up,
+               vertical_field_of_view,
+               aspect_ratio,
+               aperture,
+               distance_to_focus)
+    // panic!("Step 2a) Initialize and return a new Camera by calling its 'new' function with the \
+    //         parameters defined above");
 }
 
 fn create_scene() -> Scene {
@@ -58,9 +65,10 @@ fn create_scene() -> Scene {
 
 
 fn main() {
-    let (width, height, number_of_samples) = (600, 300, 1);
-    let camera = panic!("Step 2a) Initialize a camera by calling the 'create_camera()' \
-                         function with the width and height defined above");
+    let (width, height, number_of_samples) = (600, 300, 100);
+    let camera = create_camera(width, height);
+    // let camera = panic!("Step 2a) Initialize a camera by calling the 'create_camera()' \
+    //                      function with the width and height defined above");
     let scene = create_scene();
 
     let pixels = raytracer::trace_scene(width, height, number_of_samples, &camera, &scene);

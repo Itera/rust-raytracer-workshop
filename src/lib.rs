@@ -53,8 +53,9 @@ pub fn trace_scene(width: u32,
                 let v = ((height as f64 - y_trans - 1.0) + rng.next_f64()) / height as f64;
 
                 let ray = camera.create_ray(u, v);
-                color = panic!("Step 2b) Call the 'trace_ray_in_scene' function with the \
-                                appropriate parameters");
+                color = color + trace_ray_in_scene(&ray, scene, 0);
+                // color = panic!("Step 2b) Call the 'trace_ray_in_scene' function with the \
+                //                 appropriate parameters");
             }
             color = color / num_samples as f64;
             pixels.push(color.gamma2());
@@ -67,8 +68,17 @@ fn trace_ray_in_scene(ray: &Ray, scene: &Scene, depth: u32) -> Color {
     if depth == 50 {
         return Color::black(); // Return black to avoid being stuck with an unlimited recursion
     }
-    panic!("Step 2b) Return a gradient by calling the 'gradient' function, passing the ray as \
-            parameter")
+    match scene.intersects(ray, 0.0, f64::MAX) {
+        Some(intersection) => {
+            match intersection.shape.scatter(ray, &intersection) {
+                Some((attenuation, scattered)) => attenuation * trace_ray_in_scene(&scattered, scene, depth +1),
+                None => Color::black(),
+            }
+        }
+        None => gradient(ray),
+    }
+    // panic!("Step 2b) Return a gradient by calling the 'gradient' function, passing the ray as \
+    //         parameter")
 }
 
 fn gradient(ray: &Ray) -> Color {
