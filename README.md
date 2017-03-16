@@ -155,6 +155,38 @@ You have (partially) implemented your own ray tracer, congratulations!
 
 *Do you not think what you see is very awesome? It might be that you have done something wrong, or you might not not think that spheres are as awesome as some of us others do. Either way, let someone know so they can help you with your concerns!*
 
+## Bonus steps
+
+Are you're done with the workshop, but found it easy, or just so fun that you want to do more?
+You're in luck, 'cause you can never be done with a ray tracer! :-)
+
+There are a couple of fun and relatively easy things you can do right away, those are called `environment mapping` and `texture mapping`.
+These are terms for mapping a point in space into the coordinates of an image (also referred to as [UV mapping](https://en.wikipedia.org/wiki/UV_mapping)).
+
+**Step 5a**, lets add a nice looking environment to our scene.
+This will allow us to replace the boring blueish gradient we currently have, with a nice background like the image below!
+<img src="imgs/sky.bmp" width="500px" alt="Sky" style="display: block; margin: 0 auto;" />
+
+The first thing we need to do is to read the image, and pass a reference of this image to the `trace_ray_in_scene()` function and further on to the `gradient()` function.
+The image can be read by using `open` function from the [bmp](https://github.com/sondrele/rust-bmp) package like so: `let imageResult = bmp::open("imgs/sky.bmp");`.
+
+*Note: You need to handle the `Result` before treating the value as an image.*
+
+**Next up,** in the `gradient(ray: &Ray, img: &bmp::Image)` function (that now also has a reference to the Image you just opened) need to map the `Ray`'s direction to a `(U, V)` coordinate.
+You can implement the formula described under the [Finding UV on a sphere](https://en.wikipedia.org/wiki/UV_mapping).
+
+*Note:*
+* `dx`, `dy`, `dz` refers to the respective dimensions on the ray's direction.
+* PI is defined in the `std::f64::consts` module, and the `atan2` and `asin` functions need to be called directly on the values.
+
+**Once you** have calculated `u` and `v`, which are values between `[0,1)` you need to scale them up to a value `0 <= x < img.get_width()` and `0 <= y < img.get_height()`.
+Now, get the pixel value at coordinate `x` and `y` from the image and convert it into a `Color`.
+
+*Hint: Do the oposite of what's done in the `to_pixel` function defined in `src/bin/image.rs` to convert a `Pixel` to a `Color`.*
+
+**Verification step:**
+* Run the `cargo run --bin image` command and verify that the background is a nice looking sky instead of the gradient.
+
 ## Looking Further
 Our ray tracer is done for now, but that does not mean that we are done with cool things.
 There are a number of things you can do with this ray tracer as a starting point:
