@@ -86,7 +86,9 @@ Open the `src/scene.rs` file and take a couple of moments to reflect over the `I
 We can see that the trait contains two function signatures that are important to the core of the ray tracing algorithm:
 * **`intersects(Ray, min, max) -> Option<Intersection>`** is a function that takes in a `Ray` (in addition to a min and max limit value that helps us determine if the `Ray` intersects or not), and returns an optional `Intersection` struct.
 The returned `Intersection` contains the intersection point, the surface normal at the intersection, and the shape that was intersected. This helps us trace new rays recursively from the intersection point.
-* **`scatter(Ray, Intersection) -> Option<(Color, Ray)>`** is a function that takes a `Ray` and an `Intersection` as arguments, and returns the `Color` of the `Intersectable`, in addition to a new `Ray` with its origin at the intersection point and its direction pointing further into the scene.
+* **`scatter(Ray, Intersection) -> Option<(Color, Ray)>`** is a function that takes a `Ray` and an `Intersection` as arguments, and returns a **tuple** with the `Color` of the `Intersectable`, in addition to a new `Ray` with its origin at the intersection point and its direction pointing further into the scene.
+
+*Note: You can destructure a tuple similarly to how you can destructure an `Option`.*
 
 Further down in this file we can see two structs that implement this trait; the `Scene` and the `Sphere`.
 The `Scene` simply loops over all its `Intersectable`'s and returns the one that is closest to the origin of the `Ray`.
