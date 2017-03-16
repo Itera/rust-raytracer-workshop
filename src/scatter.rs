@@ -7,12 +7,16 @@ use ::scene::*;
 
 const INTERSECTION_ORIGIN_OFFSET: f64 = 0.00000001;
 
-pub fn diffusive(attenuation: Color, intersection: &Intersection) -> Option<(Color, Ray)> {
+pub fn scatter_ray(intersection: &Intersection) -> Ray {
     let target = intersection.intersection_point + intersection.normal +
                  random_point_in_unit_sphere();
     let origin = reflection_origin(intersection);
-    let direction = target - origin;
-    Some((attenuation, Ray::new(origin, direction)))
+    let direction = (target - origin).normalize();
+    Ray::new(origin, direction)
+}
+
+pub fn diffusive(attenuation: Color, intersection: &Intersection) -> Option<(Color, Ray)> {
+    Some((attenuation, scatter_ray(intersection)))
 }
 
 pub fn reflection(attenuation: Color,

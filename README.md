@@ -159,27 +159,30 @@ You have (partially) implemented your own ray tracer, congratulations!
 
 ## Bonus steps
 
-Are you're done with the workshop, but found it easy, or just so fun that you want to do more?
+Are you done with the workshop, but found it easy, or just so fun that you want to do more?
 You're in luck, 'cause you can never be done with a ray tracer! :-)
 
 There are a couple of fun and relatively easy things you can do right away, those are called `environment mapping` and `texture mapping`.
 These are terms for mapping a point in space into the coordinates of an image (also referred to as [UV mapping](https://en.wikipedia.org/wiki/UV_mapping)).
 
-**Step 5a**, lets add a nice looking environment to our scene.
+### Step 5 - Environment map
+
+Let's add a nice looking environment to our scene.
 This will allow us to replace the boring blueish gradient we currently have, with a nice background like the image below!
+
 <img src="imgs/sky.bmp" width="500px" alt="Sky" style="display: block; margin: 0 auto;" />
 
-The first thing we need to do is to read the image, and pass a reference of this image to the `trace_ray_in_scene()` function and further on to the `gradient()` function.
-The image can be read by using `open` function from the [bmp](https://github.com/sondrele/rust-bmp) package like so: `let imageResult = bmp::open("imgs/sky.bmp");`.
+**The first thing** we need to do is to read the image, and pass a reference of this image to the `trace_ray_in_scene()` function, and further on to the `gradient()` function.
+The image can be read by using the [`bmp::open`](http://sondrele.github.io/rust-bmp/bmp/fn.open.html) function like so: `let imageResult = bmp::open("imgs/sky.bmp");`.
 
-*Note: You need to handle the `Result` before treating the value as an image.*
+*Note: You need to handle the [`Result`](https://doc.rust-lang.org/std/result/) before you can use the image.*
 
-**Next up,** in the `gradient(ray: &Ray, img: &bmp::Image)` function (that now also has a reference to the Image you just opened) need to map the `Ray`'s direction to a `(U, V)` coordinate.
-You can implement the formula described under the [Finding UV on a sphere](https://en.wikipedia.org/wiki/UV_mapping).
+**Next up,** in the `gradient(ray: &Ray, img: &bmp::Image)` function (that now also has a reference to the Image you just opened), you need to map the `Ray`'s direction to a `(U, V)` coordinate.
+You can implement the formula described under the [Finding UV on a sphere](https://en.wikipedia.org/wiki/UV_mapping) section.
 
-*Note:*
+*Hint:*
 * `dx`, `dy`, `dz` refers to the respective dimensions on the ray's direction.
-* PI is defined in the `std::f64::consts` module, and the `atan2` and `asin` functions need to be called directly on the values.
+* All you need of math functions and variables is available in the [std::f64](https://doc.rust-lang.org/std/primitive.f64.html) module.
 
 **Once you** have calculated `u` and `v`, which are values between `[0,1)` you need to scale them up to a value `0 <= x < img.get_width()` and `0 <= y < img.get_height()`.
 Now, get the pixel value at coordinate `x` and `y` from the image and convert it into a `Color`.
@@ -188,6 +191,35 @@ Now, get the pixel value at coordinate `x` and `y` from the image and convert it
 
 **Verification step:**
 * Run the `cargo run --bin image` command and verify that the background is a nice looking sky instead of the gradient.
+
+### Step 6 - Sphere textures
+
+We can use the same technique for UV mapping described in the previous step to add a texture to a `Sphere`.
+Let's make one of our spheres look like the earth by projecting the image below to the `(U, V)` coordinates of the sphere.
+
+<img src="imgs/earth.bmp" width="500px" alt="Earth" style="display: block; margin: 0 auto;" />
+
+**Step 6a,** add a new `Sphere` to the scene in `src/bin/image.rs` by calling the `Sphere::texture("imgs/earth.bmp")` constructor.
+You need to implement the new constructor function as well, by following the same pattern as for the `Sphere::reflective` and `Sphere::refractive` constructors★.
+In addition, you need to implement the rest of the constructor by adding a new `texture: Option<std::Rc<bmp::Image>>` property to the `Sphere` struct.
+
+*Note: [`std::Rc`](https://doc.rust-lang.org/std/rc/struct.Rc.html) is a reference counted pointer, it will be necessary in order to avoid cloning the entire texture image every time the `Sphere` is cloned and added to an `Intersection`.*
+
+★ I know, it's a crude pattern - in a future refactoring you could pull out all the additional properties to a `Material` instead, but we will keep them in the `Sphere` struct for now.
+
+**Step 6b,** now that you have a `Sphere` with a texture, all you need to do is to project the image on to the `Sphere`.
+Navigate to the `scatter()` function and add a new `if`-statement for the `texture` field you just added to the `Sphere` struct.
+Then, project the surface normal to a `(U, V)` coordinate and return the corresponding `Color` value from the texture.
+The calculations are almost the same as in step 5!
+
+*Note: Depending on how you calculate the `u` and `v` coordinates, you might end up projecting a mirrored (or an upside-down) version of the earth on to the `Sphere`.*
+*This can easily be accounted for by inverting one or both of the coordinates before getting the `Color` value.*
+
+*Hint: You can use the `scatter::scatter_ray(intersection: &Intersection) -> Ray` function (defined in `src/scatter.rs`) to calculate the ray to return.*
+
+**Verification step:**
+* Run the `cargo run --bin image` command and check out your image.
+Hopefully you will have a `Sphere` that closely resembles the earth as seen from space.
 
 ## Looking Further
 Our ray tracer is done for now, but that does not mean that we are done with cool things.
