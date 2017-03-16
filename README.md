@@ -148,7 +148,7 @@ All you need to do is to multiply the *scattered color* with the new color value
 *The picture should begin look pretty good, albeit a little grainy.*
 
 **Step 4c**, we have a very easy fix to make the pictures a little less grainy:
-Open up `src/bin/image.rs` and give `num_samples` a higher value than 1, what about 100?
+Open up `src/bin/image.rs` and give `number_of_samples` a higher value than 1, what about 100?
 **Or if you're feeling ambitious** you can set it to 1000 - but be warned, it might take a little while!
 
 **Verification step:**
