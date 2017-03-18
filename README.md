@@ -29,7 +29,7 @@ By default the latest version of Rust will be installed, together with the lates
 Cargo is the build tool and package manager for rust, it lets us build libraries and executables, and run tests and the executables we have defined in the project.
 
 There's three commands you will find usable for this project:
-* `cargo build` - this command builds all the files in the project, any compilation warning (and trust me, you will encounter them) will be shown as part of the build output.
+* `cargo check` - this command checks whether the project will compile or not, any compilation warning (and trust me, you will encounter them) will be shown as part of the command output (this command requires that you have the latest version of Rust installed on your system).
 * `cargo test` - this command builds the project *and* runs all the tests in the project.
 You should run this command while you solve the assignments, they should indicate when you have passed the different steps.
 * `cargo run --bin image` - this command builds the project *and* runs the executable file found in `src/bin/image.rs` (this file contains a `main()` function, and is therefore an executable).
