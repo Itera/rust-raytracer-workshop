@@ -53,40 +53,36 @@ impl Camera {
             vertical_field_of_view: vertical_field_of_view,
             aspect_ratio: aspect_ratio,
             aperture: aperture,
-            distance_to_focus: distance_to_focus
+            distance_to_focus: distance_to_focus,
         }
     }
 
     pub fn create_ray(&self, u: f64, v: f64) -> Ray {
         let rd = self.lens_radius * random_point_in_unit_disc();
         let offset = self.u * rd.x + self.v * rd.y;
-        Ray::new(self.origin + offset,
-                 self.lower_left_corner + u * self.horizontal + v * self.vertical - self.origin -
-                 offset)
+        let direection = self.lower_left_corner + u * self.horizontal + v * self.vertical -
+                         self.origin - offset;
+        Ray::new(self.origin + offset, direection.normalize())
     }
 
     pub fn look_at(&self, at: Vec3) -> Camera {
-        Camera::new(
-            self.origin,
-            at,
-            self.orthogonal_up,
-            self.vertical_field_of_view,
-            self.aspect_ratio,
-            self.aperture,
-            self.distance_to_focus
-        )
+        Camera::new(self.origin,
+                    at,
+                    self.orthogonal_up,
+                    self.vertical_field_of_view,
+                    self.aspect_ratio,
+                    self.aperture,
+                    self.distance_to_focus)
     }
 
     pub fn move_to(&self, origin: Vec3) -> Camera {
-        Camera::new(
-            origin,
-            self.view_point,
-            self.orthogonal_up,
-            self.vertical_field_of_view,
-            self.aspect_ratio,
-            self.aperture,
-            self.distance_to_focus
-        )
+        Camera::new(origin,
+                    self.view_point,
+                    self.orthogonal_up,
+                    self.vertical_field_of_view,
+                    self.aspect_ratio,
+                    self.aperture,
+                    self.distance_to_focus)
     }
 }
 

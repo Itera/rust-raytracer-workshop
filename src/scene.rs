@@ -1,8 +1,5 @@
-use bmp;
 use scatter;
 use prelude::*;
-use std::f64;
-use std::rc::Rc;
 
 pub trait Intersectable {
     fn intersects(&self, ray: &Ray, t_min: f64, t_max: f64) -> Option<Intersection>;
@@ -140,6 +137,9 @@ impl Intersectable for Sphere {
     }
 
     fn scatter(&self, ray: &Ray, intersection: &Intersection) -> Option<(Color, Ray)> {
+        // Step 6b)
+        // Add a new if-expression to handle the case when a Sphere has a texture, then
+        // call (and implement) the scatter::texture() function.
         if let Some(diffusiveness) = self.diffusiveness {
             scatter::reflection(self.color, diffusiveness, ray, intersection)
         } else if let Some(refraction_index) = self.refraction_index {
@@ -147,11 +147,6 @@ impl Intersectable for Sphere {
         } else {
             scatter::diffusive(self.color, intersection)
         }
-        // Step 6b)
-        // Add a new if-expression to handle the case when a Sphere has a texture.
-        // Then calculate the (u, v) coordinates of the surface normal in the intersection,
-        // similarily to how you did it in Step 5), and convert the respective pixel value
-        // to a Color.
     }
 
     fn move_to(&self, vec: Vec3) -> Box<Intersectable> {
