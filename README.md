@@ -221,6 +221,55 @@ The calculations are almost the same as in step 5!
 * Run the `cargo run --bin image` command and check out your image.
 Hopefully you will have a `Sphere` that closely resembles the earth as seen from space.
 
+## Bonus step 7 - Light sources
+
+In this step we will add point light sources to our ray tracer.
+
+The lightning model we will approximate is based on the Phong shading model.
+This model divides light into the following categories:
+ - Ambient lightning
+ - Indirect lightning (reflection and refraction)
+ - Direct lightning
+
+**Step 7.1**
+
+The first thing we want to do is to add a new type for light sources. Add the `struct PointLight` to
+`scene.rs`, give it a `origin: Vec3`, a `color: Color` and a `new` constructor method. We also want
+to add a `Vec<PointLight>` to the `Scene` struct.
+
+Next we want to add a list of lights to our Scene object in `image.rs`. For example we place it at
+`Vec3::new(0.5, 2.0, -0.4)`. Use the `vec!` macro to create the list as the second argument to the Scene
+`new` function.
+
+**Verification step:**
+* Run the `cargo check` command and fix all compilation errors due to the added parameter to `Scene::new`.
+  You will also need to add the `PointLight` type to the `use` `prelude` in `lib.r|s`.
+
+**Step 7.2**
+
+Lets replace the indirect lightning, calculated by the `trace_ray_in_scene` recursive call with our new shading model.
+The shading model will combine the ambient (a constant gray color), the indirect color (our `trace_ray_in_scene`) and a new
+direct lighting. These three factors should be combined in manner depending on the material. A suggestion is
+
+Reflective/Refractive: only indirect lightning
+
+Other objects: 75% direct, 20% indirect, 5% ambient
+
+Add a new function `compute_direct_lighting(&Intersection, &Scene) -> Color` to `lib.rs`.
+
+This function is now called each time the ray hits an object. And we want to calculate the direct light
+contribution from each of the light sources to this point. We do this by iterating through all light sources
+in the scene and checking whether or not the light source illuminates the object. This is checked by trying to find
+a object between the object and the light source. If there exists such and object, then the direct light value is black,
+if no such object is found, then the direct light equals the color of the light source (1).
+
+To search for an object between the intersection and the light source do the following:
+1. create a ray from the intersection to the light source
+2. ask the scene if the ray intersects anything
+3. if nothing is found, or the found object is behind the light source, then the light source hits the object
+
+hint: add a small portion of the normal from the object to the origin of ray, this fixes a problem where the ray will hit the object itself.
+
 ## Looking Further
 Our ray tracer is done for now, but that does not mean that we are done with cool things.
 There are a number of things you can do with this ray tracer as a starting point:
