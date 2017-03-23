@@ -201,9 +201,9 @@ Let's make one of our spheres look like the earth by projecting the image below 
 
 **Step 6a,** add a new `Sphere` to the scene in `src/bin/image.rs` by calling the `Sphere::texture("imgs/earth.bmp")` constructor.
 You need to implement the new constructor function as well, by following the same pattern as for the `Sphere::reflective` and `Sphere::refractive` constructors★.
-In addition, you need to implement the rest of the constructor by adding a new `texture: Option<std::Rc<bmp::Image>>` property to the `Sphere` struct.
+In addition, you need to implement the rest of the constructor by adding a new `texture: Option<std::rc::Rc<bmp::Image>>` property to the `Sphere` struct.
 
-*Note: [`std::Rc`](https://doc.rust-lang.org/std/rc/struct.Rc.html) is a reference counted pointer, it will be necessary in order to avoid cloning the entire texture image every time the `Sphere` is cloned and added to an `Intersection`.*
+*Note: [`std::rc::Rc`](https://doc.rust-lang.org/std/rc/struct.Rc.html) is a reference counted pointer, it will be necessary in order to avoid cloning the entire texture image every time the `Sphere` is cloned and added to an `Intersection`.*
 
 ★ I know, it's a crude pattern - in a future refactoring you could pull out all the additional properties to a `Material` instead, but we will keep them in the `Sphere` struct for now.
 
