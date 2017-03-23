@@ -1,7 +1,7 @@
 use scatter;
 use prelude::*;
 
-pub trait Intersectable: Sync {
+pub trait Intersectable {
     fn intersects(&self, ray: &Ray, t_min: f64, t_max: f64) -> Option<Intersection>;
 
     fn scatter(&self, _: &Ray, _: &Intersection) -> Option<(Color, Ray)> {
@@ -105,7 +105,12 @@ impl Sphere {
         }
     }
 
-
+    pub fn texture(origin: Vec3, radius: f64, texture: &'static str) -> Sphere {
+        panic!("Step 6a) open the image located at the `texture` path, and add a new field to \
+                the Sphere struct. The new field should be a reference counted pointer to the \
+                texture image. Additionally, add a new Sphere to the scene by using the \
+                Sphere::texture(path) constructor.");
+    }
 }
 
 impl Intersectable for Sphere {
@@ -132,6 +137,9 @@ impl Intersectable for Sphere {
     }
 
     fn scatter(&self, ray: &Ray, intersection: &Intersection) -> Option<(Color, Ray)> {
+        // Step 6b)
+        // Add a new if-expression to handle the case when a Sphere has a texture, then
+        // call (and implement) the scatter::texture() function.
         if let Some(diffusiveness) = self.diffusiveness {
             scatter::reflection(self.color, diffusiveness, ray, intersection)
         } else if let Some(refraction_index) = self.refraction_index {

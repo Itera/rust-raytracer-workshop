@@ -1,4 +1,5 @@
 use rand::{self, Rng};
+use bmp;
 
 use ::vec::Vec3;
 use ::ray::Ray;
@@ -8,11 +9,7 @@ use ::scene::*;
 const INTERSECTION_ORIGIN_OFFSET: f64 = 0.00000001;
 
 pub fn diffusive(attenuation: Color, intersection: &Intersection) -> Option<(Color, Ray)> {
-    let target = intersection.intersection_point + intersection.normal +
-                 random_point_in_unit_sphere();
-    let origin = reflection_origin(intersection);
-    let direction = target - origin;
-    Some((attenuation, Ray::new(origin, direction)))
+    Some((attenuation, scatter_ray(intersection)))
 }
 
 pub fn reflection(attenuation: Color,
@@ -20,12 +17,13 @@ pub fn reflection(attenuation: Color,
                   ray: &Ray,
                   intersection: &Intersection)
                   -> Option<(Color, Ray)> {
-    let reflected = reflect(ray.direction.normalize(), intersection.normal) +
+    let reflected = reflect(ray.direction, intersection.normal) +
                     diffusiveness * random_point_in_unit_sphere();
     let origin = reflection_origin(intersection);
-    match reflected.dot(intersection.normal) > 0.0 {
-        true => Some((attenuation, Ray::new(origin, reflected))),
-        false => None,
+    if reflected.dot(intersection.normal) > 0.0 {
+        Some((attenuation, Ray::new(origin, reflected)))
+    } else {
+        None
     }
 }
 
@@ -46,10 +44,9 @@ pub fn refraction(refraction_index: f64,
     };
 
     let refracted = refract(ray.direction, outward_normal, ni_over_nt);
-    let should_refract = match refracted {
-        Some(_) => shlick_approximation(cosine, refraction_index) < rand::thread_rng().next_f64(),
-        None => false,
-    };
+    let should_refract = refracted.is_some() &&
+                         shlick_approximation(cosine, refraction_index) <
+                         rand::thread_rng().next_f64();
 
     match refracted {
         Some(refracted) if should_refract => {
@@ -63,6 +60,20 @@ pub fn refraction(refraction_index: f64,
         }
     }
 
+}
+
+pub fn texture(texture: &bmp::Image, intersection: &Intersection) -> Option<(Color, Ray)> {
+    panic!("Step 6b) Calculate the (u, v) coordinates of the surface normal in the intersection, \
+            similarily to how you did it in Step 5. Then, convert the respective pixel from the \
+            texture to a Color. You can use the scatter_ray() function below to calculate the Ray.")
+}
+
+fn scatter_ray(intersection: &Intersection) -> Ray {
+    let target = intersection.intersection_point + intersection.normal +
+                 random_point_in_unit_sphere();
+    let origin = reflection_origin(intersection);
+    let direction = (target - origin).normalize();
+    Ray::new(origin, direction)
 }
 
 fn random_point_in_unit_sphere() -> Vec3 {
@@ -81,7 +92,7 @@ fn reflection_origin(intersection: &Intersection) -> Vec3 {
 }
 
 fn reflect(v: Vec3, n: Vec3) -> Vec3 {
-    v - 2.0 * v.dot(n) * n
+    (v - 2.0 * v.dot(n) * n).normalize()
 }
 
 fn refract(v: Vec3, n: Vec3, ni_over_nt: f64) -> Option<Vec3> {
@@ -89,7 +100,7 @@ fn refract(v: Vec3, n: Vec3, ni_over_nt: f64) -> Option<Vec3> {
     let dt = uv.dot(n);
     let discriminant = 1.0 - ni_over_nt * ni_over_nt * (1.0 - dt * dt);
     if discriminant > 0.0 {
-        Some(ni_over_nt * (uv - n * dt) - n * discriminant.sqrt())
+        Some((ni_over_nt * (uv - n * dt) - n * discriminant.sqrt()).normalize())
     } else {
         None
     }
