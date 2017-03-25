@@ -51,7 +51,7 @@ Go to `src/vec.rs` and look for the code that starts with `panic!("Step 1...")`,
 *Hint: You can look at the implementation of the other vector operations in the file if you're not sure about the implementation details.*
 
 **Verification step:**
-* run the `cargo test` command and verify that all tests labeled `test_1...` run successfully.
+* run the `cargo test` command and verify that all tests labeled `step_1...` run successfully.
 
 ## Step 2 - A gradient image
 Now that we have implemented the core math our ray tracer, it is time to generate an image - we will start by implementing a simple gradient "sky" for our scene.
@@ -59,7 +59,7 @@ Now that we have implemented the core math our ray tracer, it is time to generat
 **Step 2a**, we need to set up a camera so that we can capture an image of our scene, head to `src/bin/image.rs` to figure out the missing values that is needed to initialize the `Camera`.
 As you can see, the `main()` function is rather simple.
 All it does is initialize our camera and a scene, and then it calls the `trace_scene()` library routine, which in turn gives us a vector of colors (given by the type `Vec<Color>`) - one `Color` for each pixel in the image.
-Finally, it takes these color values and converts them to a BMP image that it save as `scene.bmp`.
+Finally, it takes these color values and converts them to a BMP image that it saves as `scene.bmp`.
 
 **Step 2b**, head to the `src/lib.rs` and navigate to the `trace_scene()` library function - this function contains the main loop of the ray tracer.
 This is where we initialize the color vector (`Vec<Color>`), and the for each `x` and `y` coordinate of the image we cast a new ray from the camera and into the scene by calling the `trace_ray_in_scene()` function (see the picture in the top of the README for an illustration).
